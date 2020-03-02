@@ -3,7 +3,7 @@ Sub TotalConsolidatedDataExtract()
     ' Change File Location to match where your data is
     ' List of workbooks we will loop through
     Dim CustomerDemandWorkbook As String
-    CustomerDemandWorkbook = "C:\HUB\Documents\personal\EC\Customer Demand.xlsx"
+    CustomerDemandWorkbook = "R:\Operations\Pre-Production\Planning\Customer Demand\Customer Demand.xlsx"
     
     ' Create the sheets we need in this workbook
     ThisWorkbook.Worksheets.Add.Name = "extractData"
@@ -283,44 +283,62 @@ Sub colorTotalConsolidatedInventory()
     Next currentRowConsolidated
 End Sub
 
-Sub TotalConsolidatedNewParts()
+Sub GenerateInventory()
     
     ' Create the sheets we need in this workbook
+    ThisWorkbook.Worksheets.Add.Name = "Inventory"
     ThisWorkbook.Worksheets.Add.Name = "New Parts"
     
+    ' Open the Inventory workbook
+    Dim wb As Workbook: Set wb = Workbooks.Open("R:\Operations\Pre-Production\Planning\Planning_Erica\EDI\Templates\Master Inventory.xlsx")
+    
     ' Set the sheets/tabs we will use
-    Dim inventorySheet As Worksheet: Set inventorySheet = Worksheets("Inventory")
-    Dim newPartsSheet As Worksheet: Set newPartsSheet = Worksheets("New Parts")
-    Dim totalConsolidatedSource As Worksheet: Set totalConsolidatedSource = Worksheets("Total Consolidated")
+    Dim inventorySheet As Worksheet: Set inventorySheet = wb.Worksheets("Master Inventory")
+    Dim consolidatedInventorySheet As Worksheet: Set consolidatedInventorySheet = ThisWorkbook.Worksheets("Inventory")
+    Dim newPartsSheet As Worksheet: Set newPartsSheet = ThisWorkbook.Worksheets("New Parts")
+    Dim totalConsolidatedSource As Worksheet: Set totalConsolidatedSource = ThisWorkbook.Worksheets("Total Consolidated")
     
     ' Need to know last row of Total Consolidated sheet/tab to know what part numbers to search for. Need to know last row of Inventory tab for search funtion
-    Dim lastRowTotalConsolidatedSource As Long: lastRowTotalConsolidatedSource = totalConsolidatedSource.Cells(Rows.Count, 1).End(xlUp).Row
+    Dim lastRowTotaltotalConsolidatedSource As Long: lastRowTotaltotalConsolidatedSource = totalConsolidatedSource.Cells(Rows.Count, 1).End(xlUp).Row
     Dim lastRowInventorySource As Long: lastRowInventorySource = inventorySheet.Cells(Rows.Count, 1).End(xlUp).Row
+    Dim lastRowTotalConsolidatedInventorySource As Long: lastRowTotalConsolidatedInventorySource = consolidatedInventorySheet.Cells(Rows.Count, 1).End(xlUp).Row
     Dim currentRowNewParts As Long: currentRowNewParts = 1
     
     ' Variable to assign found part number rows as we loop
     Dim foundPart As Range
     
     ' Loop through Total Consolidated sheet/tab part numbers. start in row 2 to avoid header row
-    For currentRowTotalConsolidated = 2 To lastRowTotalConsolidatedSource
+    For currentRowTotalConsolidated = 2 To lastRowTotaltotalConsolidatedSource
         'Find row of Part Number in Inventory Tab. Returns Nothing if part number is not on the inventory
         Set foundPart = inventorySheet.UsedRange.Find(totalConsolidatedSource.Cells(currentRowTotalConsolidated, 1), SearchOrder:=xlByRows, SearchDirection:=xlPrevious)
         
-        ' If Part Number is not found we need to add it to the inventory sheet and new parts sheet
+        ' If Part Number is not found we need to add it to the consolidated inventory sheet and new parts sheet
         If foundPart Is Nothing Then
             ' Write part number to inventory sheet/tab
-            inventorySheet.Cells(lastRowInventorySource + 1, 1) = totalConsolidatedSource.Cells(currentRowTotalConsolidated, 1)
+            consolidatedInventorySheet.Cells(lastRowTotalConsolidatedInventorySource, 1) = totalConsolidatedSource.Cells(currentRowTotalConsolidated, 1)
             
             ' set part quantity to 0 in inventory sheet/tab
-            inventorySheet.Cells(lastRowInventorySource + 1, 2) = 0
+            consolidatedInventorySheet.Cells(lastRowTotalConsolidatedInventorySource, 2) = 0
             
             ' add part number to new parts sheet/tab
             newPartsSheet.Cells(currentRowNewParts, 1) = totalConsolidatedSource.Cells(currentRowTotalConsolidated, 1)
             
             ' Increment the variables since we have written to them
-            lastRowInventorySource = lastRowInventorySource + 1
+            lastRowTotalConsolidatedInventorySource = lastRowTotalConsolidatedInventorySource + 1
             currentRowNewParts = currentRowNewParts + 1
+        ' If Part number is found, add it to the consolidated inventory sheet
+        Else
+            ' Write part number to inventory sheet/tab
+            consolidatedInventorySheet.Cells(lastRowTotalConsolidatedInventorySource, 1) = totalConsolidatedSource.Cells(currentRowTotalConsolidated, 1)
+            
+            ' set part quantity to 0 in inventory sheet/tab
+            consolidatedInventorySheet.Cells(lastRowTotalConsolidatedInventorySource, 2) = inventorySheet.Cells(foundPart.Row, 2).Value
+            
+            ' Increment the variables since we have written to them
+            lastRowTotalConsolidatedInventorySource = lastRowTotalConsolidatedInventorySource + 1
         End If
     Next currentRowTotalConsolidated
+    
+    wb.Close
 
 End Sub
