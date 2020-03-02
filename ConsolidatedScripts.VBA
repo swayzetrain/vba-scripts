@@ -25,6 +25,76 @@ Sub ExtractEDIData()
     FormatConsolidated
 End Sub
 
+Sub StartTulsaDataExtract()
+
+    'Change File Locations to match where your data is
+    TulsaWorkbook = "R:\Operations\Pre-Production\Planning\Planning_Erica\EDI\Templates\Tulsa.xlsx"
+    
+    ThisWorkbook.Worksheets.Add.Name = "extractData"
+    ThisWorkbook.Worksheets.Add.Name = "temp"
+    ThisWorkbook.Worksheets.Add.Name = "Consolidated"
+    
+    ExtractWorkbookData (TulsaWorkbook)
+
+    FormatConsolidated
+End Sub
+
+Sub StartSagDataExtract()
+
+    'Change File Locations to match where your data is
+    SagWorkbook = "R:\Operations\Pre-Production\Planning\Planning_Erica\EDI\Templates\Sag.xlsx"
+    
+    ThisWorkbook.Worksheets.Add.Name = "extractData"
+    ThisWorkbook.Worksheets.Add.Name = "temp"
+    ThisWorkbook.Worksheets.Add.Name = "Consolidated"
+    
+    ExtractWorkbookData (SagWorkbook)
+
+    FormatConsolidated
+End Sub
+
+Sub StartMxLine1DataExtract()
+
+    'Change File Locations to match where your data is
+    MxLine1Workbook = "R:\Operations\Pre-Production\Planning\Planning_Erica\EDI\Templates\MxLine1.xlsx"
+    
+    ThisWorkbook.Worksheets.Add.Name = "extractData"
+    ThisWorkbook.Worksheets.Add.Name = "temp"
+    ThisWorkbook.Worksheets.Add.Name = "Consolidated"
+    
+    ExtractWorkbookData (MxLine1Workbook)
+
+    FormatConsolidated
+End Sub
+
+Sub StartMxLine2DataExtract()
+
+    'Change File Locations to match where your data is
+    MxLine2Workbook = "R:\Operations\Pre-Production\Planning\Planning_Erica\EDI\Templates\MxLine2.xlsx"
+    
+    ThisWorkbook.Worksheets.Add.Name = "extractData"
+    ThisWorkbook.Worksheets.Add.Name = "temp"
+    ThisWorkbook.Worksheets.Add.Name = "Consolidated"
+    
+    ExtractWorkbookData (MxLine2Workbook)
+
+    FormatConsolidated
+End Sub
+
+Sub StartRollinsDataExtract()
+
+    'Change File Locations to match where your data is
+    RollinsWorkbook = "R:\Operations\Pre-Production\Planning\Planning_Erica\EDI\Templates\Rollins.xlsx"
+    
+    ThisWorkbook.Worksheets.Add.Name = "extractData"
+    ThisWorkbook.Worksheets.Add.Name = "temp"
+    ThisWorkbook.Worksheets.Add.Name = "Consolidated"
+    
+    ExtractWorkbookData (RollinsWorkbook)
+
+    FormatConsolidated
+End Sub
+
 Sub ExtractWorkbookData(workbookFilePath As String)
 
     ' Open the external workbook
